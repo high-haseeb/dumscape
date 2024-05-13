@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Matter from "matter-js";
 
 const Scene = () => {
   const canvasRef = useRef();
@@ -134,67 +133,9 @@ const Scene = () => {
         ref={canvasRef}
         className="bg-gray-400 w-1/2 h-full rounded-3xl"
       ></canvas>
-      <Model callback={callback} className="w-1/2 h-full rounded-3xl"/>
     </div>
   );
 };
 
 export default Scene;
 
-import { Engine, Render, Bodies, World } from "matter-js";
-import { Model } from "./rapier";
-
-function Comp({ setPos: posRef, props }) {
-  const scene = useRef();
-  const engine = useRef(Engine.create());
-
-  useEffect(() => {
-    const cw = scene.current.clientWidth;
-    const ch = scene.current.clientHeight;
-    const render = Render.create({
-      element: scene.current,
-      engine: engine.current,
-      options: {
-        width: cw,
-        height: ch,
-        wireframes: false,
-        background: "transparent",
-      },
-    });
-
-    World.add(engine.current.world, [
-      Bodies.rectangle(0,ch, cw, 20, { isStatic: true }),
-    ]);
-
-    const ball = Bodies.circle(100, 100, 10 + Math.random() * 30, {
-      mass: 10,
-      restitution: 1,
-      friction: 0.005,
-      render: {
-        fillStyle: "#0000ff",
-      },
-    });
-    World.add(engine.current.world, [ball]);
-    const updateBallPos = () => {
-      posRef.push(ball.velocity.y.toFixed(1));
-      posRef.shift()
-      requestAnimationFrame(updateBallPos);
-    }
-    updateBallPos();
-
-    Matter.Runner.run(engine.current);
-    Render.run(render);
-
-    return () => {
-      Render.stop(render);
-      World.clear(engine.current.world);
-      Engine.clear(engine.current);
-      render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
-      render.textures = {};
-    };
-  }, []);
-
-  return <div ref={scene} className="w-1/2 h-full bg-gray-500 rounded-3xl" />;
-}
