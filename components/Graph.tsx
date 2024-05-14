@@ -1,6 +1,7 @@
 "use client";
-import useStateStore, { useConfigStore, Config } from "@/store/state";
-import React, { useEffect, useRef, useState } from "react";
+import useStateStore from "@/store/state";
+import { useConfigStore, Config } from '@/store/configStore' 
+import React, { useEffect, useRef } from "react";
 
 interface GraphProps {
   rangeMax?: number;
@@ -16,7 +17,7 @@ const Graph: React.FC<GraphProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const position = useStateStore((state) => state.position);
-  const config = useConfigStore()
+  const config = useConfigStore();
   useEffect(() => {
     update(canvasRef.current, position, config);
   }, [position]);
@@ -62,7 +63,11 @@ const initGraph = (
   return null;
 };
 
-const update = (canvas: HTMLCanvasElement, positions: number[], config: Config) => {
+const update = (
+  canvas: HTMLCanvasElement,
+  positions: number[],
+  config: Config,
+) => {
   const ctx = canvas.getContext("2d");
   const cw = canvas.clientWidth;
   const ch = canvas.clientHeight;
@@ -76,7 +81,7 @@ const update = (canvas: HTMLCanvasElement, positions: number[], config: Config) 
   // ctx.moveTo(PAD, ch - PAD);
   for (let index = 0; index < positions.length - 2; index++) {
     const cur_pos = positions[index];
-    if(config.interp === 'bezier'){
+    if (config.interp === "bezier") {
       const next_pos = positions[index + 1];
       const ctrlX1 = PAD * index + PAD / 2;
       const ctrlY1 = ch + cur_pos * (ch / 2) - PAD;
@@ -85,10 +90,13 @@ const update = (canvas: HTMLCanvasElement, positions: number[], config: Config) 
       const endX = PAD * (index + 1);
       const endY = ch + next_pos * (ch / 2) - PAD;
       ctx.bezierCurveTo(ctrlX1, ctrlY1, ctrlX2, ctrlY2, endX, endY);
-    }else {
-      ctx.lineTo(PAD * index + PAD, ch + (cur_pos * (ch / (2))) - PAD );
+    } else {
+      ctx.lineTo(
+        // PAD * (index *(cw/ positions.length)) + PAD,
+        index * ((cw - 2*PAD)/ positions.length) + PAD,
+        ch - (cur_pos) * (ch / 4) - (ch/2),
+      );
     }
-
   }
   ctx.stroke();
 };
