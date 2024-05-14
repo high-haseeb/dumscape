@@ -6,6 +6,7 @@ import { useConfigStore,} from "@/store/configStore";
  // import {useMenuStore} from '@/store/menuStore' 
 
 import Add from "./Add";
+import Joint from "./Joint";
 
 const Menu = () => {
   const setPaused = useConfigStore((state) => state.setPaused);
@@ -17,8 +18,8 @@ const Menu = () => {
       <div className="flex gap-2 bg-gray-800 rounded h-full">
         <div className="flex flex-col gap-4 justify-start items-center p-2 w-10">
           <Icon icon="logo_d" onClick={() => console.log("clicked")} />
-          <Icon icon="cube_add" onClick={() => console.log("clicked")} />
-          <Icon icon="graph" onClick={() => console.log("clicked")} />
+          <Icon icon="cube_add" onClick={() => console.log("clicked")}  title="add object"/>
+          <Icon icon="graph" onClick={() => console.log("clicked")} title="add joint"/>
           <Icon icon="globe" onClick={() => setPaused(!paused)} />
           <Icon icon="gear" onClick={() => console.log("clicked")} />
           <Icon icon="arrow_down" onClick={() => console.log("clicked")} />
@@ -26,6 +27,7 @@ const Menu = () => {
         </div>
       </div>
       <Add/>
+      <Joint/>
     </div>
   );
 };

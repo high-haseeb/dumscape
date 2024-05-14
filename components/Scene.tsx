@@ -1,48 +1,43 @@
 "use client";
 
 import useStateStore from "@/store/state";
-import { useConfigStore } from '@/store/configStore'
-import {
-  Environment,
-  OrbitControls,
-} from "@react-three/drei";
-import {
-  Physics,
-  RigidBody,
-  useSpringJoint,
-  RapierRigidBody,
-} from "@react-three/rapier";
-import { Suspense, useRef } from "react";
+import { useConfigStore } from "@/store/configStore";
+import { Environment, OrbitControls } from "@react-three/drei";
+import { Physics, RigidBody, useSpringJoint, RapierRigidBody, useFixedJoint, useRopeJoint, RigidBodyTypeString } from "@react-three/rapier";
+import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import Image from "next/image";
-import useSchemaStore, { Object } from "@/store/schemaStore";
+import useSchemaStore, { Object, useJointStore } from "@/store/schemaStore";
+import Joint from "./ui/Joint";
 
 export const Model = (props: any) => {
   const paused = useConfigStore((state) => state.paused);
   const debug = useConfigStore((state) => state.debug);
-  const schema = useSchemaStore(state => state.objects)
+  const schema = useSchemaStore((state) => state.objects);
 
   return (
     <div {...props}>
-      <Suspense fallback={
-        <div className="flex items-center justify-center w-full h-full bg-gray-500">
-          <Image src={'/icons/logo.svg'} alt="logo" width={400} height={100}/>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="flex justify-center items-center w-full h-full bg-gray-500">
+            <Image src={"/icons/logo.svg"} alt="logo" width={400} height={100} />
+          </div>
+        }
+      >
         <Canvas {...props}>
           <Physics paused={paused} debug={debug}>
             {/* <TransformControls> */}
 
             {/* <Body /> */}
             {/* <JointedThing /> */}
-            {
-              schema.map((object, index) => (
-              <Body object={object} />
-              ))
-            }
+            {schema.map((object, index) => (
+              <Body object={object} index={index} />
+            ))}
 
             {/* </TransformControls> */}
+
+            <Joints />
             <Ground />
           </Physics>
           <OrbitControls makeDefault />
@@ -52,19 +47,63 @@ export const Model = (props: any) => {
     </div>
   );
 };
-const Body = ({ object } : {object : Object}) => {
-  const ref = useRef<RapierRigidBody>();
-  const meshRef = useRef<THREE.Mesh>();
-  const setPosition = useStateStore((state) => state.setPosition);
-  useFrame(() => {
-    if (!ref.current) return;
-    // setPosition(Number(ref.current.translation().y.toFixed(2)));
+const Joints = () => {
+  const objects = useSchemaStore((state) => state.objects);
+  const joints = useJointStore((state) => state.joints);
+  useEffect(() => {
+    joints.map(
+      (joint, _index) => {
+        switch (joint.jointType.toLowerCase()) {
+          case "fixed":
+            useFixedJoint(objects[0].ref, objects[1].ref, [
+              [joint.positionA.x, joint.positionA.y, joint.positionA.z],
+              [joint.orientationA.x, joint.orientationA.y, joint.orientationA.z, 1],
+              [joint.positionB.x, joint.positionB.y, joint.positionB.z],
+              [joint.orientationB.x, joint.orientationB.y, joint.orientationB.z, 1],
+            ]);
+            break;
+
+          case "rope":
+            useRopeJoint(objects[0].ref, objects[1].ref, [
+              [joint.positionA.x, joint.positionA.y, joint.positionA.z],
+              [joint.positionB.x, joint.positionB.y, joint.positionB.z],
+              joint.ropeLength,
+            ]);
+            console.log("added rope joint");
+            break;
+
+          default:
+            break;
+        }
+      },
+      [joints],
+    );
   });
+  return <></>;
+};
+const Body = ({ object, index }: { object: Object; index: number }) => {
+  const bodyRef = useRef<RapierRigidBody>();
+  const meshRef = useRef<THREE.Mesh>();
+  const setRef = useSchemaStore((state) => state.setRef);
+  const setPosition = useStateStore((state) => state.setPosition);
+
+  useEffect(() => {
+    if (bodyRef.current) {
+      setRef(index, bodyRef);
+    }
+  }, [bodyRef.current]);
+
+  // useFrame(() => {
+  //   if (!bodyRef.current) return;
+  // setPosition(Number(ref.current.translation().y.toFixed(2)));
+  // });
 
   return (
-    <RigidBody ref={ref} 
-      position={[object.translation.x, object.translation.y,object.translation.z ]} 
-      rotation={[object.rotation.x, object.rotation.y,object.rotation.z ]}
+    <RigidBody
+      ref={bodyRef}
+      type={object.type as RigidBodyTypeString}
+      position={[object.translation.x, object.translation.y, object.translation.z]}
+      rotation={[object.rotation.x, object.rotation.y, object.rotation.z]}
       mass={object.mass}
       linearDamping={object.linearDamping}
       angularDamping={object.angularDamping}
@@ -72,8 +111,8 @@ const Body = ({ object } : {object : Object}) => {
       friction={object.friction}
       restitution={object.restitution}
     >
-      <mesh ref={meshRef} scale={[object.scale.x, object.scale.y,object.scale.z ]} >
-        {object.geometry === 'sphere' ? <sphereGeometry args={[1]} /> : <boxGeometry args={[1,1,1]} />}
+      <mesh ref={meshRef} scale={[object.scale.x, object.scale.y, object.scale.z]}>
+        {object.geometry === "sphere" ? <sphereGeometry args={[1]} /> : <boxGeometry args={[1, 1, 1]} />}
         <meshStandardMaterial color={object.color} />
       </mesh>
     </RigidBody>
@@ -116,7 +155,7 @@ const JointedThing = () => {
   ]);
   // const joint = useRopeJoint(bodyA, bodyB, [[0, 0, 0], [0, 0, 0], 2]);
   // useEffect(() => {
-    // console.log(joint.current)
+  // console.log(joint.current)
   // }, [joint])
 
   const setPosition = useStateStore((state) => state.setPosition);
@@ -126,7 +165,7 @@ const JointedThing = () => {
   });
   return (
     <group>
-      <RigidBody ref={bodyA} position={[0, 5, 0]} type="fixed" >
+      <RigidBody ref={bodyA} position={[0, 5, 0]} type="fixed">
         <mesh>
           <boxGeometry args={[0.2, 0.2, 0.2]} />
           <meshStandardMaterial color={"red"} attach={"material"} />
@@ -141,4 +180,3 @@ const JointedThing = () => {
     </group>
   );
 };
-
