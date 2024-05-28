@@ -26,10 +26,41 @@ export interface Joint {
   positionB?: { x: number; y: number; z: number };
   orientationA?: { x: number; y: number; z: number };
   orientationB?: { x: number; y: number; z: number };
+  springRestLength?: number;
   damping?: number;
   ropeLength?: number;
   stiffness?: number;
 }
+export interface Impulse{
+  type: string;
+  direction: {x: number; y: number; z: number},
+  magnitude: number;
+  bodyRef : RefObject<RapierRigidBody> | null;
+  index: number;
+  used? : boolean;
+}
+interface Impulses{
+  impulses: Impulse[];
+  addImpulse : (impulse: Impulse) => void;
+  setImpulseUsed : (impulse: Impulse) => void;
+}
+export const useImpulseStore = create<Impulses>((set) => ({
+  impulses: [],
+  addImpulse: (impulse: Impulse) => set((state) => ({ impulses: [...state.impulses, impulse] })),
+ setImpulseUsed: (impulse: Impulse) => set((state) => ({
+    impulses: state.impulses.map((imp) => 
+      imp === impulse ? { ...imp, used: true } : imp
+    )
+  })),
+}));
+interface Graphs {
+  graphBody: Object | null;
+  setGraphBody : (body: Object) => void;
+}
+export const useGraphStore = create<Graphs>((set) => ({
+  graphBody: null,
+  setGraphBody: (body: Object) => set((state) => ({ graphBody: body })),
+}));
 
 export interface Joints {
   joints: Joint[];

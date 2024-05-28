@@ -1,6 +1,6 @@
 "use client";
 import useStateStore from "@/store/state";
-import { useConfigStore, Config } from '@/store/configStore' 
+import { useConfigStore, Config } from '@/store/configStore';
 import React, { useEffect, useRef } from "react";
 
 interface GraphProps {
@@ -16,11 +16,14 @@ const Graph: React.FC<GraphProps> = ({
   ...props
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const position = useStateStore((state) => state.position);
+  const { position, velocity } = useStateStore((state) => ({
+    position: state.position,
+    velocity: state.velocity,
+  }));
   const config = useConfigStore();
   useEffect(() => {
-    update(canvasRef.current, position, config);
-  }, [position]);
+    update(canvasRef.current, position, velocity, config);
+  }, [position, velocity]);
 
   return <canvas ref={canvasRef} {...props}></canvas>;
 };
@@ -43,7 +46,12 @@ const initGraph = (
   ctx.lineTo(cw - PAD, ch - PAD);
   ctx.stroke();
 
-  for (let index = y_min; index < y_max; index++) {
+  ctx.beginPath();
+  ctx.moveTo(PAD, ch - PAD);
+  ctx.lineTo(PAD, PAD);
+  ctx.stroke();
+
+  for (let index = y_min; index <= y_max; index++) {
     ctx.beginPath();
     ctx.strokeStyle = GRID_COLOR;
     ctx.setLineDash([10, 30]);
@@ -59,16 +67,68 @@ const initGraph = (
     ctx.lineTo(x_offset, PAD);
     ctx.stroke();
   }
-  // ctx.font = "28px Montserrat";
+
+  ctx.fillStyle = "#000";
+  ctx.font = "12px Arial";
+  ctx.textAlign = "center";
+
+  // Draw x-axis labels
+  for (let i = 0; i <= 10; i++) {
+    const x = ((cw - 2 * PAD) / 10) * i + PAD;
+    const label = `${i}`;
+    ctx.fillText(label, x, ch - PAD + 20);
+  }
+
+  // Draw y-axis labels
+  ctx.textAlign = "right";
+  for (let i = y_min; i <= y_max; i++) {
+    const y = ch - ((ch - 2 * PAD) / (y_max - y_min)) * (i - y_min) - PAD;
+    const label = `${i}`;
+    ctx.fillText(label, PAD - 10, y + 3);
+  }
+
+  // Axis labels
+  ctx.textAlign = "center";
+  ctx.fillText("time", cw / 2, ch - PAD + 40);
+
+  ctx.save();
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = "center";
+  ctx.fillText("displacement", -ch / 2, PAD - 40);
+  ctx.restore();
+
+  // Legend
+  const legendItems = [
+    { label: "Position X", color: "red" },
+    { label: "Position Y", color: "green" },
+    { label: "Position Z", color: "blue" },
+    { label: "Velocity X", color: "pink" },
+    { label: "Velocity Y", color: "orange" },
+    { label: "Velocity Z", color: "lime" },
+  ];
+
+  ctx.textAlign = "left";
+  legendItems.forEach((item, index) => {
+    ctx.fillStyle = item.color;
+    ctx.fillRect(cw - PAD + 10, PAD + index * 20, 10, 10);
+    ctx.fillStyle = "#000";
+    ctx.fillText(item.label, cw - PAD + 30, PAD + index * 20 + 10);
+  });
+
   return null;
 };
 
 const update = (
-  canvas: HTMLCanvasElement,
-  positions: number[],
+  canvas: HTMLCanvasElement | null,
+  positions: { x: number[]; y: number[]; z: number[] },
+  velocities: { x: number[]; y: number[]; z: number[] },
   config: Config,
 ) => {
+  if (!canvas) return;
+
   const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
   const cw = canvas.clientWidth;
   const ch = canvas.clientHeight;
   canvas.width = cw;
@@ -76,29 +136,49 @@ const update = (
 
   initGraph(ctx, cw, ch, 10, 0);
 
-  ctx.strokeStyle = "black";
-  ctx.beginPath();
-  // ctx.moveTo(PAD, ch - PAD);
-  for (let index = 0; index < positions.length - 2; index++) {
-    const cur_pos = positions[index];
-    if (config.interp === "bezier") {
-      const next_pos = positions[index + 1];
-      const ctrlX1 = PAD * index + PAD / 2;
-      const ctrlY1 = ch + cur_pos * (ch / 2) - PAD;
-      const ctrlX2 = PAD * (index + 1) - PAD / 2;
-      const ctrlY2 = ch + next_pos * (ch / 2) - PAD;
-      const endX = PAD * (index + 1);
-      const endY = ch + next_pos * (ch / 2) - PAD;
-      ctx.bezierCurveTo(ctrlX1, ctrlY1, ctrlX2, ctrlY2, endX, endY);
-    } else {
-      ctx.lineTo(
-        // PAD * (index *(cw/ positions.length)) + PAD,
-        index * ((cw - 2*PAD)/ positions.length) + PAD,
-        ch - (cur_pos) * (ch / 4) - (ch/2),
-      );
+  const colors = {
+    x: 'red',
+    y: 'green',
+    z: 'blue',
+    vx: 'pink',
+    vy: 'orange',
+    vz: 'lime',
+  };
+
+  const drawLine = (axis: 'x' | 'y' | 'z', color: string, data: number[]) => {
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    for (let index = 0; index < data.length - 1; index++) {
+      const cur_pos = data[index];
+      const next_pos = data[index + 1];
+
+      if (config.interp === "bezier") {
+        const ctrlX1 = PAD * index + PAD / 2;
+        const ctrlY1 = ch - cur_pos * (ch / 2) - PAD;
+        const ctrlX2 = PAD * (index + 1) - PAD / 2;
+        const ctrlY2 = ch - next_pos * (ch / 2) - PAD;
+        const endX = PAD * (index + 1);
+        const endY = ch - next_pos * (ch / 2) - PAD;
+        ctx.bezierCurveTo(ctrlX1, ctrlY1, ctrlX2, ctrlY2, endX, endY);
+      } else {
+        ctx.lineTo(
+          index * ((cw - 2 * PAD) / data.length) + PAD,
+          ch - cur_pos * (ch / 4) - (ch / 2)
+        );
+      }
     }
-  }
-  ctx.stroke();
+    ctx.stroke();
+  };
+
+  // Draw position lines
+  drawLine('x', colors.x, positions.x);
+  drawLine('y', colors.y, positions.y);
+  drawLine('z', colors.z, positions.z);
+
+  // Draw velocity lines
+  drawLine('x', colors.vx, velocities.x);
+  drawLine('y', colors.vy, velocities.y);
+  drawLine('z', colors.vz, velocities.z);
 };
 
 export default Graph;

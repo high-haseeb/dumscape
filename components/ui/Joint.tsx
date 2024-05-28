@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import SubMenu from "./Submenu";
-import useSchemaStore, { Joint, useJointStore } from "@/store/schemaStore";
+import useSchemaStore, { Joint as Joints, useJointStore } from "@/store/schemaStore";
 import Image from "next/image";
 
-const Joint = () => {
+const Joints = () => {
   const schema = useSchemaStore((state) => state.objects);
   const addJoint = useJointStore(state => state.addJoint);
 
@@ -22,7 +22,7 @@ const Joint = () => {
   const [bodyB, setBodyB] = useState<string>(null);
 
   const [jointType, setJointType] = useState<string>("fixed");
-  const joint :Joint= {
+  const joint :Joints= {
     bodyA,
     bodyB,
     positionA, positionB, orientationA, orientationB,
@@ -30,12 +30,13 @@ const Joint = () => {
     ropeLength,
     stiffness,
     damping,
+    springRestLength,
   }
 
   return (
     <SubMenu title="graph">
       <div className="flex flex-col gap-2 p-2">
-        {schema.map((object, index) => (
+        {schema.map((object, _index) => (
           <div className="flex gap-2 justify-start items-center px-4 w-full bg-gray-200 rounded">
             <Image src={"/icons/cube_dark.svg"} alt="cube" width={15} height={10} />
             {object.name}
@@ -171,4 +172,4 @@ const Input = ({
   );
 };
 
-export default Joint;
+export default Joints;

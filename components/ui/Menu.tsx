@@ -6,7 +6,9 @@ import { useConfigStore,} from "@/store/configStore";
  // import {useMenuStore} from '@/store/menuStore' 
 
 import Add from "./Add";
-import Joint from "./Joint";
+import Joints from "./Joint";
+import Impulse from "./Impulse";
+import Monitor from "./Monitor";
 
 const Menu = () => {
   const setPaused = useConfigStore((state) => state.setPaused);
@@ -22,12 +24,15 @@ const Menu = () => {
           <Icon icon="graph" onClick={() => console.log("clicked")} title="add joint"/>
           <Icon icon="globe" onClick={() => setPaused(!paused)} />
           <Icon icon="gear" onClick={() => console.log("clicked")} />
-          <Icon icon="arrow_down" onClick={() => console.log("clicked")} />
+          <Icon icon="arrow_down" onClick={() => console.log("clicked")} title="add impulse"/>
+          <Icon icon="monitor" onClick={() => console.log("clicked")} title="monitor a body"/>
           <Icon icon="bug" title="toggle debug" onClick={() => setDebug(!debug)} />
         </div>
       </div>
       <Add/>
-      <Joint/>
+      <Joints/>
+      <Impulse/>
+      <Monitor/>
     </div>
   );
 };
