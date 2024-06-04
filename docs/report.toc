@@ -1,0 +1,71 @@
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Literature Review}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Overview of Existing Modeling and Simulation Tools}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Comparison of Features in Existing Tools}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Gaps in Current Tools}{6}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Theoretical Framework}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Fundamental Principles of Modeling and Simulation}{7}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Mathematical Foundations and Equations Used}{7}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Explanation of Key Physics Concepts Implemented}{8}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Design and Architecture}{9}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Overall System Architecture}{9}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Key Components and Their Interactions}{9}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}User Interface}{9}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Physics Engine}{9}{subsection.4.2.2}%
+\contentsline {paragraph}{Initialization}{10}{section*.2}%
+\contentsline {paragraph}{Force Calculation}{10}{section*.3}%
+\contentsline {paragraph}{Acceleration and Velocity Update}{10}{section*.4}%
+\contentsline {paragraph}{Position Update}{10}{section*.5}%
+\contentsline {paragraph}{Collision Detection and Response}{10}{section*.6}%
+\contentsline {paragraph}{Rendering Preparation}{10}{section*.7}%
+\contentsline {subsection}{\numberline {4.2.3}3D Rendering}{11}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Technology Stack}{11}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Data Flow and Control Flow Diagrams}{11}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Data Flow Diagram}{11}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Control Flow Diagram}{11}{subsection.4.4.2}%
+\contentsline {chapter}{\numberline {5}Development Process}{13}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Coding Techniques and Algorithms Used}{13}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Object-Oriented Programming (OOP)}{13}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Numerical Integration}{13}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Collision Detection and Response}{14}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Challenges Faced and Solutions Implemented}{14}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Performance Optimization}{14}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Precision and Stability}{14}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}User Interface Design}{15}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Details of the Custom Physics Engine}{15}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Force Calculation}{15}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Integration and State Update}{15}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Collision Detection and Response}{15}{subsection.5.3.3}%
+\contentsline {section}{\numberline {5.4}Integration of the 3D Rendering Module}{16}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Rendering Pipeline}{16}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Updating Objects for Rendering}{17}{subsection.5.4.2}%
+\contentsline {chapter}{\numberline {6}Features and Functionality}{18}{chapter.6}%
+\contentsline {section}{\numberline {6.1}User Interface and User Experience (UI/UX) Design}{18}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Core Features of the App}{18}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Description of Different Modules and Their Functionalities}{19}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}User Interface (UI) Module}{19}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Physics Engine Module}{19}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}3D Rendering Module}{20}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Scenario Manager Module}{20}{subsection.6.3.4}%
+\contentsline {section}{\numberline {6.4}Example Scenarios and Simulations}{20}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Simple Pendulum}{20}{subsection.6.4.1}%
+\contentsline {chapter}{\numberline {7}Performance Evaluation}{21}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Testing Methodologies}{21}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Performance Metrics and Benchmarks}{21}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Results of Performance Tests}{22}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Comparison with Other Tools (if Applicable)}{22}{section.7.4}%
+\contentsline {chapter}{\numberline {8}Case Studies and Applications}{24}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Example Use Cases}{24}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Step-by-Step Walkthroughs of Simulations}{24}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Quarter Car Model Simulation}{24}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Pendulum Simulation}{25}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Mass Spring System Simulation}{25}{subsection.8.2.3}%
+\contentsline {section}{\numberline {8.3}Analysis of Results from Sample Simulations}{25}{section.8.3}%
+\contentsline {chapter}{\numberline {9}Future Work and Improvements}{26}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Limitations of the Current Version}{26}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Potential Enhancements and Features to be Added}{26}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Long-term Vision for the Project}{27}{section.9.3}%
+\contentsline {chapter}{\numberline {10}Conclusion}{29}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Summary of the Project}{29}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Key Achievements}{29}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Final Thoughts}{30}{section.10.3}%

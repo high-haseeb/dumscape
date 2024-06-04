@@ -1,0 +1,58 @@
+\chapter{Theoretical Framework}
+
+\section{Fundamental Principles of Modeling and Simulation}
+
+Modeling and simulation are processes used to represent and analyze the behavior of real-world systems. The fundamental principles involve creating a mathematical model that describes the system and using this model to conduct simulations to predict system behavior under various conditions.
+
+\begin{itemize}
+    \item \textbf{Modeling:} The process of developing a mathematical representation of a physical system. This involves identifying the key variables and parameters, defining the relationships between them, and formulating equations that describe these relationships.
+    \item \textbf{Simulation:} The process of using a model to study the behavior of a system. Simulations are performed by executing the model with a set of initial conditions and observing the output over time. This helps in understanding how the system responds to different inputs and conditions.
+\end{itemize}
+
+\section{Mathematical Foundations and Equations Used}
+
+The mathematical foundations of the project are based on fundamental principles of physics and numerical methods for solving differential equations. The key mathematical components include:
+
+\begin{itemize}
+    \item \textbf{Differential Equations:} Many physical phenomena are described by differential equations. For example, Newton's second law of motion, which states that the force acting on an object is equal to its mass times its acceleration, is formulated as:
+    \begin{equation}
+        \mathbf{F} = m \mathbf{a}
+    \end{equation}
+    where \(\mathbf{F}\) is the force vector, \(m\) is the mass, and \(\mathbf{a}\) is the acceleration vector.
+    \item \textbf{Numerical Integration:} To solve differential equations numerically, we use integration methods such as the Euler method or the Runge-Kutta methods. These methods approximate the solution by iteratively updating the state of the system over small time steps.
+    \item \textbf{Linear Algebra:} Many problems in physics involve solving systems of linear equations. Techniques from linear algebra, such as matrix operations and eigenvalue decomposition, are essential for these tasks.
+\end{itemize}
+
+\section{Explanation of Key Physics Concepts Implemented}
+
+The project implements several key physics concepts to provide accurate simulations. These concepts include:
+
+\begin{itemize}
+    \item \textbf{Kinematics:} The study of motion without considering the forces that cause it. Kinematic equations describe the position, velocity, and acceleration of objects.
+    \begin{equation}
+        \mathbf{v} = \mathbf{u} + \mathbf{a} t
+    \end{equation}
+    \begin{equation}
+        \mathbf{s} = \mathbf{u} t + \frac{1}{2} \mathbf{a} t^2
+    \end{equation}
+    where \(\mathbf{v}\) is the final velocity, \(\mathbf{u}\) is the initial velocity, \(\mathbf{a}\) is the acceleration, \(t\) is the time, and \(\mathbf{s}\) is the displacement.
+    
+    \item \textbf{Dynamics:} The study of forces and their effects on motion. Newton's laws of motion are the foundation of dynamics.
+    
+    \item \textbf{Energy and Work:} Concepts of kinetic energy, potential energy, and work done by forces. The work-energy principle states that the work done by all forces acting on an object is equal to the change in its kinetic energy.
+    \begin{equation}
+        W = \Delta K = \frac{1}{2} m v_f^2 - \frac{1}{2} m v_i^2
+    \end{equation}
+    where \(W\) is the work done, \(K\) is the kinetic energy, \(m\) is the mass, \(v_f\) is the final velocity, and \(v_i\) is the initial velocity.
+    
+    \item \textbf{Conservation Laws:} Principles such as the conservation of momentum and conservation of energy, which state that in a closed system, the total momentum and total energy remain constant.
+    \begin{equation}
+        \mathbf{p}_{\text{initial}} = \mathbf{p}_{\text{final}}
+    \end{equation}
+    \begin{equation}
+        E_{\text{initial}} = E_{\text{final}}
+    \end{equation}
+    where \(\mathbf{p}\) is the momentum vector and \(E\) is the energy.
+\end{itemize}
+
+These principles and mathematical foundations form the core of the project, enabling users to create accurate and dynamic simulations of various physical systems.

@@ -1,0 +1,147 @@
+
+\chapter{Design and Architecture}
+
+\section{Overall System Architecture}
+
+The overall architecture of our project consists of several key components that work together to provide a comprehensive modeling and simulation tool. These components include the User Interface (UI), the Physics Engine, and the 3D Rendering module. The architecture is designed to be modular, allowing for easy integration and extension of features.
+
+
+\section{Key Components and Their Interactions}
+
+\subsection{User Interface}
+
+The User Interface (UI) is the front-end component of the project. It allows users to interact with the system, input parameters, and visualize results. The UI is designed to be intuitive and user-friendly, providing various controls and visual aids to enhance the user experience.
+
+Key features of the UI include:
+\begin{itemize}
+    \item Parameter input fields
+    \item Real-time simulation controls (start, stop, pause, reset)
+    \item Visualization of simulation results in 3D
+    \item Interactive elements for manipulating 3D objects
+\end{itemize}
+
+\subsection{Physics Engine}
+
+The Physics Engine is the core computational component of the project. It is responsible for simulating the physical behavior of objects based on the input parameters. The Physics Engine is developed from scratch and follows several key steps to ensure accurate and efficient simulations.
+
+Key steps in the Physics Engine include:
+
+\paragraph{Initialization}
+\begin{itemize}
+    \item Load initial conditions and parameters
+    \item Set up data structures for storing object states
+    \item Initialize simulation time step and control variables
+\end{itemize}
+
+\paragraph{Force Calculation}
+\begin{itemize}
+    \item Compute forces acting on each object
+    \item Include gravitational, frictional, and applied forces
+    \item Calculate net force for each object
+\end{itemize}
+
+\paragraph{Acceleration and Velocity Update}
+\begin{itemize}
+    \item Use Newton's second law to calculate acceleration:
+    \begin{equation}
+        \mathbf{a} = \frac{\mathbf{F}_{\text{net}}}{m}
+    \end{equation}
+    where \(\mathbf{a}\) is the acceleration, \(\mathbf{F}_{\text{net}}\) is the net force, and \(m\) is the mass.
+    \item Update velocity using:
+    \begin{equation}
+        \mathbf{v} = \mathbf{v}_0 + \mathbf{a} \Delta t
+    \end{equation}
+    where \(\mathbf{v}\) is the updated velocity, \(\mathbf{v}_0\) is the initial velocity, \(\mathbf{a}\) is the acceleration, and \(\Delta t\) is the time step.
+\end{itemize}
+
+\paragraph{Position Update}
+\begin{itemize}
+    \item Update position of each object using:
+    \begin{equation}
+        \mathbf{s} = \mathbf{s}_0 + \mathbf{v} \Delta t
+    \end{equation}
+    where \(\mathbf{s}\) is the updated position, \(\mathbf{s}_0\) is the initial position, \(\mathbf{v}\) is the velocity, and \(\Delta t\) is the time step.
+\end{itemize}
+
+\paragraph{Collision Detection and Response}
+\begin{itemize}
+    \item Detect collisions between objects
+    \item Calculate response forces and update velocities accordingly
+    \item Ensure conservation of momentum and energy
+\end{itemize}
+
+\paragraph{Rendering Preparation}
+\begin{itemize}
+    \item Prepare updated states for rendering
+    \item Pass data to the 3D Rendering module
+\end{itemize}
+
+\subsection{3D Rendering}
+
+The 3D Rendering module is responsible for visualizing the simulation results in a three-dimensional space. It takes the updated object states from the Physics Engine and renders them using appropriate graphics techniques.
+
+Key features of the 3D Rendering module include:
+\begin{itemize}
+    \item Real-time rendering of objects in 3D
+    \item Handling of lighting, shading, and textures
+    \item Support for interactive manipulation of the 3D view
+    \item Efficient rendering algorithms to ensure smooth performance
+\end{itemize}
+
+\section{Technology Stack}
+
+The project utilizes a variety of technologies to achieve its goals. The technology stack includes:
+
+\begin{itemize}
+    \item \textbf{Languages:} TypeScript, Next.js, Node.js
+    \item \textbf{Frameworks:} React.js for UI development, Three.js for 3D rendering
+    % \item \textbf{Libraries:} Numeric.js for numerical calculations, Cannon.js for physics simulations (modified and extended)
+    \item \textbf{Tools:} Webpack for module bundling, Babel for JavaScript transpilation, Git for version control
+\end{itemize}
+
+\section{Data Flow and Control Flow Diagrams}
+
+\subsection{Data Flow Diagram}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[node distance=2cm, every node/.style={draw, fill=blue!10, minimum width=2.5cm, minimum height=1cm, align=center}]
+        \node (user) {User};
+        \node (ui) [right=of user] {User Interface};
+        \node (engine) [right=of ui] {Physics Engine};
+        \node (rendering) [right=of engine] {3D Rendering};
+        \node (output) [right=of rendering] {Visualization};
+
+        \draw[->] (user) -- (ui) node[midway, above] {Input};
+        \draw[->] (ui) -- (engine) node[midway, above] {Parameters};
+        \draw[->] (engine) -- (rendering) node[midway, above] {Object States};
+        \draw[->] (rendering) -- (output) node[midway, above] {Rendered Frames};
+    \end{tikzpicture}
+    \caption{Data Flow Diagram}
+    \label{fig:data_flow}
+\end{figure}
+
+\subsection{Control Flow Diagram}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[node distance=1.5cm, every node/.style={draw, fill=blue!10, minimum width=3cm, minimum height=1cm, align=center}]
+        \node (start) {Start Simulation};
+        \node (init) [below=of start] {Initialize};
+        \node (calculate) [below=of init] {Calculate Forces};
+        \node (update) [below=of calculate] {Update States};
+        \node (collision) [below=of update] {Collision Detection};
+        \node (render) [below=of collision] {Render Frame};
+        \node (end) [below=of render] {End Simulation};
+
+        \draw[->] (start) -- (init);
+        \draw[->] (init) -- (calculate);
+        \draw[->] (calculate) -- (update);
+        \draw[->] (update) -- (collision);
+        \draw[->] (collision) -- (render);
+        \draw[->] (render) -- (end);
+        \draw[->] (render.east) -- ++(2,0) |- (calculate.east);
+    \end{tikzpicture}
+    \caption{Control Flow Diagram}
+    \label{fig:control_flow}
+\end{figure}

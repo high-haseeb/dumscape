@@ -1,1 +1,1 @@
-# A modeling App for 2d modeling of simple mechanical and rotational systems
+![dumbscapes_logo](./public/icons/logo.svg) 
